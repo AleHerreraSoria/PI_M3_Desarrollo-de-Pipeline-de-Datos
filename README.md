@@ -137,4 +137,4 @@ El pipeline genera las siguientes tablas en la capa `business_layer` para respon
 ## 8. Autor
 
 * www.linkedin.com/in/alejandro-nelson-herrera-soria
-* [GitHub](https://www.google.com/search?q=https://github.com/AleHerreraSoria "null")
+  https://github.com/AleHerreraSoria
