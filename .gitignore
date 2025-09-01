@@ -1,0 +1,24 @@
+# Ignorar la carpeta del entorno virtual por completo
+.venv/
+
+# Ignorar carpetas de datos (crudos y generados)
+/raw_data/
+/data/
+/src/raw_data/
+
+# Ignorar la carpeta de logs de Airflow
+/airflow/logs/
+
+# Ignorar la caché de Python
+__pycache__/
+*.pyc
+
+# Ignorar archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de configuración de GCP
+gcp_credentials.json
+
+# Ignorar la carpeta de logs de Airflow
+/airflow/logs/
