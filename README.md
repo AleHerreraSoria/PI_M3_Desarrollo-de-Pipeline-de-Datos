@@ -117,3 +117,10 @@ Se ha configurado un flujo de trabajo con **GitHub Actions** (`.github/workflows
    cd PI_M3_Desarrollo-de-Pipeline-de-Datos
 
    ```
+
+## 7. Autor
+Alejandro Nelson Herrera Soria
+
+LinkedIn: www.linkedin.com/in/alejandro-nelson-herrera-soria
+
+GitHub: https://github.com/AleHerreraSoria
