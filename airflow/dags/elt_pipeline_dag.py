@@ -6,15 +6,13 @@ from airflow.models.dag import DAG
 from airflow.providers.google.cloud.operators.bigquery import BigQueryExecuteQueryOperator
 
 # --- Constantes y Configuración ---
-# Define aquí las variables específicas de tu proyecto en GCP.
 GCP_PROJECT_ID = "eng-name-468100-g3"
-BIGQUERY_RAW_DATASET = "raw_data"
+# Nombres de datasets corregidos a un solo guion bajo
+BIGQUERY_RAW_DATASET = "raw_data" 
 BIGQUERY_TRANSFORMED_DATASET = "transformed_data"
 BIGQUERY_BUSINESS_DATASET = "business_layer"
 
 # --- Script de Transformación SQL ---
-# Este es el mismo script que ejecutamos manualmente en el Avance 3.
-# Airflow se encargará de ejecutarlo en BigQuery.
 TRANSFORMATION_SQL = f"""
 -- PASO 1: Crear la tabla limpia y enriquecida en la capa transformada
 CREATE OR REPLACE TABLE `{GCP_PROJECT_ID}.{BIGQUERY_TRANSFORMED_DATASET}.listings_cleaned` AS
@@ -39,7 +37,7 @@ WITH Staging_Listings AS (
   FROM
     `{GCP_PROJECT_ID}.{BIGQUERY_RAW_DATASET}.ab_nyc`
   WHERE
-    price > 0
+    SAFE_CAST(price AS FLOAT64) > 0
 ),
 Latest_Exchange_Rate AS (
   SELECT
@@ -133,15 +131,13 @@ with DAG(
     dag_id="elt_bigquery_pipeline",
     start_date=pendulum.datetime(2025, 1, 1, tz="UTC"),
     catchup=False,
-    schedule="@daily", # Define la frecuencia de ejecución (diariamente)
+    schedule="@daily",
     tags=["elt", "bigquery"],
 ) as dag:
-    # --- Definición de la Tarea ---
-    # Esta única tarea ejecuta todo nuestro script de transformación en BigQuery.
-    # Airflow se conecta a GCP usando la conexión 'google_cloud_default' que creamos.
     transform_and_load_to_business_layer = BigQueryExecuteQueryOperator(
         task_id="transform_and_load_to_business_layer",
         sql=TRANSFORMATION_SQL,
         use_legacy_sql=False,
         gcp_conn_id="google_cloud_default",
     )
+

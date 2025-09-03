@@ -1,7 +1,7 @@
 # ############################################################################
 # Docker Compose para un entorno de desarrollo local de Apache Airflow
+# Versión final para habilitar el DockerOperator
 # ############################################################################
-version: '3.8'
 
 services:
   # Servicio de Base de Datos (PostgreSQL) para la metadata de Airflow
@@ -24,7 +24,9 @@ services:
 
   # Servicio de inicialización de la base de datos de Airflow
   airflow-init:
-    image: apache/airflow:2.8.0
+    # build: . le dice a Docker Compose que construya la imagen a partir
+    # del Dockerfile que está en la misma carpeta.
+    build: .
     container_name: airflow_init
     depends_on:
       postgres:
@@ -41,7 +43,7 @@ services:
 
   # El planificador de tareas de Airflow (Scheduler)
   airflow-scheduler:
-    image: apache/airflow:2.8.0
+    build: . # Usa la imagen personalizada
     container_name: airflow_scheduler
     depends_on:
       airflow-init:
@@ -54,11 +56,15 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      # Conectar el socket de Docker del host al contenedor de Airflow
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Montar las credenciales en una ruta estándar y segura
+      - ./gcp_credentials.json:/usr/local/share/credentials/gcp_credentials.json:ro
     command: scheduler
 
   # El servidor web de Airflow (Webserver)
   airflow-webserver:
-    image: apache/airflow:2.8.0
+    build: . # Usa la imagen personalizada
     container_name: airflow_webserver
     depends_on:
       airflow-scheduler:
@@ -73,7 +79,12 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      # Conectar también el socket de Docker aquí
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Montar también las credenciales aquí
+      - ./gcp_credentials.json:/usr/local/share/credentials/gcp_credentials.json:ro
     command: webserver
 
 volumes:
   postgres_data:
+
