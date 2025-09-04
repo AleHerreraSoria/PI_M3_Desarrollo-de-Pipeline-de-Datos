@@ -42,7 +42,7 @@ El pipeline se compone de tres etapas fundamentales, orquestadas por  **Google C
 
 A continuación, se presenta la descripción detallada de la arquitectura del pipeline ELT, que servirá de base para la creación del diagrama técnico.
 
-[Imagen de un diagrama de arquitectura de datos en GCP]
+![Diagrama de Arquitectura de Datos en GCP](../img/arquitectura_cloud.png)
 
 **Componentes de la Arquitectura:**
 
