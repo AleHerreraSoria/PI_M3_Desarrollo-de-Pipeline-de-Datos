@@ -117,6 +117,43 @@ Se ha configurado un flujo de trabajo con **GitHub Actions** (`.github/workflows
    cd PI_M3_Desarrollo-de-Pipeline-de-Datos
 
    ```
+2.  **Configurar Credenciales de GCP:**
+-   Crea una cuenta de servicio con los roles: Usuario de BigQuery, Editor de datos de BigQuery y Administrador de objetos de Storage.
+-   Descarga el archivo de credenciales JSON, renómbralo a gcp_credentials.json y colócalo dentro de la carpeta src/.
+
+3.  **Cargar Datos Iniciales en BigQuery:**
+
+-   Crea los datasets raw_data, transformed_data y business_layer en tu proyecto de BigQuery.
+
+-   Carga manualmente el archivo AB_NYC.csv en la tabla raw_data.ab_nyc, asegurándote de definir el esquema como STRING y omitir la primera fila de encabezado.
+
+4.  **Ejecutar el Extractor de Datos (una vez):**
+
+-   Navega a la carpeta src/.
+
+-   Ejecuta el contenedor para subir el tipo de cambio a GCS: docker run --rm -v "${pwd}/gcp_credentials.json:/app/gcp_credentials.json" anhsoria/bcra-extractor:1.0 (Asegúrate de tener la imagen bcra-extractor local o usa la versión pública).
+
+5.  **Levantar Airflow:**
+
+-   Navega a la carpeta airflow/.
+
+-   Ejecuta: docker compose up -d
+
+-   Accede a la UI en http://localhost:8080 (user: admin, pass: admin).
+
+6.  **Configurar y Ejecutar el DAG:**
+
+-   En la UI de Airflow, ve a Admin > Connections y crea una conexión google_cloud_default pegando el contenido de tu gcp_credentials.json.
+
+-   Activa y ejecuta manualmente el DAG elt_bigquery_pipeline.
+
+7.  **Visualizar los Resultados:**
+
+-   Navega a la carpeta src/.
+
+-   Instala las dependencias: pip install -r requirements-viz.txt
+
+-   Abre y ejecuta el notebook visualizacion_negocio.ipynb con VS Code o Jupyter.
 
 ## 7. Autor
 Alejandro Nelson Herrera Soria
